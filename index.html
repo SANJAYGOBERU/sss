@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSS Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            width: 80%;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .input-box, .calculation-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+        input, button {
+            margin-top: 10px;
+            padding: 8px;
+            font-size: 1em;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #007BFF;
+        }
+        h2 {
+            text-align: center;
+            width: 100%;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>SSS Calculator</h2>
+
+    <!-- ID Input Section (Small at the top) -->
+    <div class="input-box">
+        <label for="user_id">Enter ID (Optional):</label>
+        <input type="text" id="user_id" name="user_id" placeholder="Enter your ID">
+    </div>
+
+    <div class="container">
+        <!-- Time Difference Calculation Form -->
+        <div class="calculation-box">
+            <h3>Time Difference Calculation</h3>
+            <label for="start_datetime">Start Date and Time:</label>
+            <input type="datetime-local" id="start_datetime" name="start_datetime" required>
+
+            <label for="end_datetime">End Date and Time:</label>
+            <input type="datetime-local" id="end_datetime" name="end_datetime" required>
+
+            <button onclick="calculateTimeDifference()">Calculate Time Difference</button>
+
+            <div class="result" id="time_result"></div>
+        </div>
+
+        <!-- Units Difference Calculation Form -->
+        <div class="calculation-box">
+            <h3>Units Difference Calculation</h3>
+            <label for="lmu">Last Month Units (LMU):</label>
+            <input type="number" id="lmu" name="lmu" placeholder="Enter LMU">
+
+            <label for="pmu">Present Month Units (PMU):</label>
+            <input type="number" id="pmu" name="pmu" placeholder="Enter PMU">
+
+            <button onclick="calculateUnitDifference()">Calculate Unit Difference</button>
+
+            <div class="result" id="unit_result"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculateTimeDifference() {
+            const startDateTime = document.getElementById('start_datetime').value;
+            const endDateTime = document.getElementById('end_datetime').value;
+            const timeResult = document.getElementById('time_result');
+
+            if (startDateTime && endDateTime) {
+                const start = new Date(startDateTime);
+                const end = new Date(endDateTime);
+
+                if (start > end) {
+                    timeResult.textContent = "End time must be after the start time.";
+                    return;
+                }
+
+                const diff = end - start;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                timeResult.textContent = `The time difference is ${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`;
+            } else {
+                timeResult.textContent = "Please fill out both fields.";
+            }
+        }
+
+        function calculateUnitDifference() {
+            const lmu = document.getElementById('lmu').value;
+            const pmu = document.getElementById('pmu').value;
+            const unitResult = document.getElementById('unit_result');
+
+            if (lmu && pmu) {
+                const lmuNum = parseInt(lmu);
+                const pmuNum = parseInt(pmu);
+
+                if (isNaN(lmuNum) || isNaN(pmuNum)) {
+                    unitResult.textContent = "Invalid LMU or PMU values entered.";
+                } else {
+                    unitResult.textContent = `Units Difference: ${pmuNum - lmuNum}`;
+                }
+            } else {
+                unitResult.textContent = "Please fill out both fields.";
+            }
+        }
+    </script>
+</body>
+</html>
